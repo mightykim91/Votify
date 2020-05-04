@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block body %}
+<h1 class="text-center mt-5">{{ poll.first_competitor }} VS {{ poll.second_competitor }}</h1>
+<hr>
+
+<div class="d-flex flex-column w-100 bg-dark text-light text-center" style="height:400px">
+  <h1 class="mt-3">POLL STATUS</h1>
+  <div class="d-flex flex-row mt-3" style="height:50%">
+    <div class="text-light text-center" style="width:50%">
+      <h2><a href="{% url 'poll_manager:vote_first' poll.pk %}">{{ poll.first_competitor }} </a></h2>
+      <h2>{{ poll.firstCount }}</h2>
+    </div>
+    <div class="text-light text-center" style="width:50%">
+      <h2><a href="{% url 'poll_manager:vote_second' poll.pk %}" class="text-success">{{ poll.second_competitor }} </a></h2>
+      <h2>{{ poll.secondCount }}</h2>
+    </div>
+  </div>
+  <div class="progress mx-3">
+    <div class="progress-bar" role="progressbar" style="width: {{ first_ratio }}%" aria-valuenow="{{ first_ratio }}" aria-valuemin="0" aria-valuemax="100">{{ first_ratio }}%</div>
+    <div class="progress-bar bg-success" role="progressbar" style="width: {{ second_ratio }}%" aria-valuenow="{{ second_ratio }}" aria-valuemin="0" aria-valuemax="100">{{ second_ratio }}%</div>
+  </div>
+  <p class="mt-3">To Vote, Click competitor name that you like ^^</p>
+</div>
+
+{% endblock %}
+{% block comment %}
+<h3>Write your comment</h3>
+<div class="container border border-dark p-2">
+  <form action="{% url 'poll_manager:create_comment' poll.pk %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    <input class="btn btn-primary" type="submit" value="Register your comment">
+  </form>
+</div>
+<hr>
+<h2>Comments</h2>
+{% for comment in comments %}
+<div class="container border border-dark p-2">
+  <p>Writter: {{ comment.name }}</p>
+  <p>{{ comment.content }}</p>
+</div>
+<hr>
+{% endfor %}
+
+
+{% endblock %}
+

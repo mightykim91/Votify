@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load bootstrap4 %}
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>POLL</title>
+  {% bootstrap_css %}
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="text-center navbar-brand" href="/poll_manager/">VOTIFY</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link active" href="{% url 'poll_manager:random' %}">Random Poll</a>
+        <a class="nav-item nav-link active" href="{% url 'poll_manager:create' %}">Create Poll</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    {% block body %}
+    {% endblock %}
+    <hr>
+  </div>
+
+  <div class="container">
+    {% block comment %}
+    {% endblock %}
+  </div>
+  {% bootstrap_javascript jquery='full' %}
+</body>
+</html>

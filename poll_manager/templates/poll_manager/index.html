@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block body %}
+
+
+  <div id="carouselExampleControls" class="carousel slide mt-5 mb-5" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active d-flex flex-row justify-content-center">
+        <div class="d-flex flex-column justify-content-center w-100 bg-dark text-light text-center" style="height:400px">
+          <h1>WELCOME TO VOTIFY<br>THE POLL SITE FOR BORING JOB SEEKERS</h1>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="d-flex flex-column w-100 bg-dark text-light text-center p-5" style="height:400px">
+          <h1><img src="https://img.icons8.com/emoji/48/000000/fire.png">TOP POLL<img src="https://img.icons8.com/emoji/48/000000/fire.png"></h1>
+          <h2 class="mt-3">{{ top_poll.0.first_competitor }} VS {{ top_poll.0.second_competitor }}</h2>
+          <div class="progress my-3 mx-5" style="height:40px">
+            <div class="progress-bar" role="progressbar" style="width: {{ top_poll.0.firstRatio }}%" aria-valuenow="{{ top_poll.0.poll.firstRatio }}" aria-valuemin="0" aria-valuemax="100">{{ top_poll.0.first_competitor }}: {{ top_poll.0.firstRatio }}%</div>
+            <div class="progress-bar bg-success" role="progressbar" style="width:{{ top_poll.0.secondRatio }}%" aria-valuenow="{{ top_poll.0.secondRatio }}" aria-valuemin="0" aria-valuemax="100">{{ top_poll.0.second_competitor }}: {{ top_poll.0.secondRatio }}%</div>
+          </div>
+          <h5 class="mb-3">
+            {% if top_poll.0.firstRatio > top_poll.0.secondRatio %}
+            <b>{{ top_poll.0.first_competitor }}</b> is winning!!
+            {% elif top_poll.0.firstRatio < top_poll.0.secondRatio %}
+            <b>{{ top_poll.0.second_competitor }}</b> is winning!!
+            {% endif %}
+          </h5>
+          <div class="d-flex justify-content-center">
+            <a href="{% url 'poll_manager:detail' top_poll.0.pk %}" class="btn btn-danger" style="width:200px">Jump to Vote!</a>
+          </div>
+        </div>
+      </div>
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  </div>
+  <hr>
+  <h1 class="text-center">On-Going Polls</h1>
+{% for poll in polls %}
+    <div class="card">
+      <h4 class="card-header text-center">{{ poll.first_competitor }} VS {{ poll.second_competitor }}</h4>
+      <div class="card-body">
+        <h5 class="mb-3">Current Poll Status -
+        {% if poll.firstRatio > poll.secondRatio %}
+          <b>{{ poll.first_competitor }}</b> is winning!!
+        {% elif poll.firstRatio < poll.secondRatio %}
+          <b>{{ poll.second_competitor }}</b> is winning!!
+        {% else %}
+          Vote for your taste and let them win the vote!!
+        {% endif %}
+        </h5>
+        <div class="progress" style="height:40px">
+          <div class="progress-bar" role="progressbar" style="width: {{ poll.firstRatio }}%" aria-valuenow="{{ poll.firstRatio }}" aria-valuemin="0" aria-valuemax="100">{{ poll.first_competitor }}: {{ poll.firstRatio }}%</div>
+          <div class="progress-bar bg-success" role="progressbar" style="width:{{ poll.secondRatio }}%" aria-valuenow="{{ secondRatio }}" aria-valuemin="0" aria-valuemax="100">{{ poll.second_competitor }}: {{ poll.secondRatio }}%</div>
+        </div>
+        <hr>
+        <a href="{% url 'poll_manager:detail' poll.pk %}" class="btn btn-primary">Go to Poll</a>
+      </div>
+    </div>
+{% endfor %}
+{% endblock %}
+
+<script>
+  var total_votes = {{ poll.firstCount }} + {{ poll.secondCount }}
+  var ratio_a = ({{ poll.firstCount }} * 100)//total_votes
+  var ratio_b = 100-ratio_a
+</script>
